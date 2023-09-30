@@ -1,0 +1,15 @@
+1;Christiane Amanpour
+2;Carl Bernstein
+3;Walter Cronkite
+4;Bob Woodward
+7;Hunter S. Thompson
+8;Diane Sawyer
+10;Lester Holt
+12;Maria Bartiromo
+13;Megyn Kelly
+15;Ben Bradlee
+16;Hu Shuli
+17;Rachel Maddow
+18;Tom Brokaw
+19;Dexter Filkins
+20;Thomas Friedman

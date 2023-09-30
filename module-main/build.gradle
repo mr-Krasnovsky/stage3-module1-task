@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+group 'com.mjc.school'
+version 'unspecified'
+
+sourceCompatibility = 17
+targetCompatibility = 17
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation project(':module-service')
+    implementation project(':module-web')
+    implementation project(':module-repository')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClassName = 'com.mjc.school.Main'
+}
