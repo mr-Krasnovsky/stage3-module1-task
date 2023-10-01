@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private NewsService newsService;
-    private Scanner scanner;
+    private final NewsService newsService;
+    private final Scanner scanner;
 
     public Main() {
         this.newsService = new NewsService(new FileNewsRepository());
-        this.scanner = new Scanner(System.in);;
+        this.scanner = new Scanner(System.in);
     }
 
     public static void main(String[] args) throws IOException {
@@ -73,6 +73,17 @@ public class Main {
     }
 
     private void getNewsById() {
+        System.out.println("Operation: Get news by id.");
+        System.out.println("Enter news id:");
+        int newsId = scanner.nextInt();
+        scanner.nextLine();
+        NewsDTO news = newsService.getNewsById(newsId);
+        if(news == null){
+            System.out.println("ERROR_CODE: 000001 ERROR_MESSAGE: News with id " +  newsId + " does not exist.");
+        } else {
+            printNews(news);
+        }
+
     }
 
     private void getAllNews() throws IOException {
@@ -81,14 +92,18 @@ public class Main {
             System.out.println("No news");
         } else {
             for (NewsDTO news: newsList){
-                System.out.print("NewsDtoResponse [");
-                System.out.print("id=" + news.getId());
-                System.out.print(", title=" + news.getTitle());
-                System.out.print(", content=" + news.getContent());
-                System.out.print(", createDate=" + news.getCreateDate());
-                System.out.print(", lastUpdateDate=" + news.getLastUpdateDate());
-                System.out.println(", authorId=" + news.getAuthorId() +"]");
+                printNews(news);
             }
         }
+    }
+
+    public static void printNews(NewsDTO news){
+        System.out.print("NewsDtoResponse [");
+        System.out.print("id=" + news.getId());
+        System.out.print(", title=" + news.getTitle());
+        System.out.print(", content=" + news.getContent());
+        System.out.print(", createDate=" + news.getCreateDate());
+        System.out.print(", lastUpdateDate=" + news.getLastUpdateDate());
+        System.out.println(", authorId=" + news.getAuthorId() +"]");
     }
 }

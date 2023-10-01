@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsService {
-    private NewsRepository newsRepository;
+    private final NewsRepository newsRepository;
+    private final NewsMapper newsMapper = NewsMapper.INSTANSE;
 
     public NewsService(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
@@ -15,16 +16,16 @@ public class NewsService {
         List<News> newsList = newsRepository.getAllNews();
         List<NewsDTO> newsDTOList = new ArrayList<>();
         for (News news: newsList){
-            NewsDTO newsDTO = new NewsDTO();
-            newsDTO.setId(news.getId());
-            newsDTO.setTitle(news.getTitle());
-            newsDTO.setContent(news.getContent());
-            newsDTO.setCreateDate(news.getCreateDate());
-            newsDTO.setLastUpdateDate(news.getLastUpdateDate());
-            newsDTO.setAuthorId(news.getAuthorId());
-
+            NewsDTO newsDTO = newsMapper.newsToNewsDTO(news);
             newsDTOList.add(newsDTO);
         }
         return newsDTOList;
+    }
+
+    public NewsDTO getNewsById(int newsId) {
+        News news = newsRepository.getNewsById(newsId);
+        if (news != null) {
+            return newsMapper.newsToNewsDTO(news);
+        } else return null;
     }
 }

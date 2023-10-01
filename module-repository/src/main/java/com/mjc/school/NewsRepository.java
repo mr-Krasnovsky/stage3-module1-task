@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface NewsRepository {
     List<News> getAllNews() throws IOException;
+
+    News getNewsById(int id);
 }

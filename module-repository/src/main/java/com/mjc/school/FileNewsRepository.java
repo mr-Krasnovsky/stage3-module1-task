@@ -26,6 +26,20 @@ public class FileNewsRepository implements NewsRepository{
         return allNews;
     }
 
+    @Override
+    public News getNewsById(int id) {
+        try{
+        List<News> allNews = getAllNews();
+
+            for (News news: allNews){
+                if (news.getId() == id) return news;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public News createNews(String str){
         News news = null;
         String[] newsStr = str.split(";");
