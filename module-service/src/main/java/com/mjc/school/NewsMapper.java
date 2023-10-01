@@ -8,13 +8,13 @@ import org.mapstruct.factory.Mappers;
 public interface NewsMapper {
 
     NewsMapper INSTANSE = Mappers.getMapper(NewsMapper.class);
+
     @Mapping(target = "id", source = "id")
     @Mapping(target = "title", source = "title")
     @Mapping(target = "content", source = "content")
     @Mapping(target = "createDate", source = "createDate")
     @Mapping(target = "lastUpdateDate", source = "lastUpdateDate")
     @Mapping(target = "authorId", source = "authorId")
-
     NewsDTO newsToNewsDTO(News news);
 
     @Mapping(target = "id", source = "id")

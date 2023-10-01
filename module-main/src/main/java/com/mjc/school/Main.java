@@ -78,8 +78,8 @@ public class Main {
         int newsId = scanner.nextInt();
         scanner.nextLine();
         NewsDTO news = newsService.getNewsById(newsId);
-        if(news == null){
-            System.out.println("ERROR_CODE: 000001 ERROR_MESSAGE: News with id " +  newsId + " does not exist.");
+        if (news == null) {
+            System.out.println("ERROR_CODE: 000001 ERROR_MESSAGE: News with id " + newsId + " does not exist.");
         } else {
             printNews(news);
         }
@@ -88,22 +88,22 @@ public class Main {
 
     private void getAllNews() throws IOException {
         List<NewsDTO> newsList = newsService.getAllNews();
-        if(newsList.isEmpty()) {
+        if (newsList.isEmpty()) {
             System.out.println("No news");
         } else {
-            for (NewsDTO news: newsList){
+            for (NewsDTO news : newsList) {
                 printNews(news);
             }
         }
     }
 
-    public static void printNews(NewsDTO news){
+    public static void printNews(NewsDTO news) {
         System.out.print("NewsDtoResponse [");
         System.out.print("id=" + news.getId());
         System.out.print(", title=" + news.getTitle());
         System.out.print(", content=" + news.getContent());
         System.out.print(", createDate=" + news.getCreateDate());
         System.out.print(", lastUpdateDate=" + news.getLastUpdateDate());
-        System.out.println(", authorId=" + news.getAuthorId() +"]");
+        System.out.println(", authorId=" + news.getAuthorId() + "]");
     }
 }
