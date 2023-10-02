@@ -1,4 +1,5 @@
 package com.mjc.school;
 
-public class AuthorRepository {
+public interface AuthorRepository {
+    Author getAuthorByID(Long id);
 }
