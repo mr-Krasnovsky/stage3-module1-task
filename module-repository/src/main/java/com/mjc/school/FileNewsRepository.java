@@ -7,6 +7,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FileNewsRepository implements NewsRepository {
@@ -34,7 +35,7 @@ public class FileNewsRepository implements NewsRepository {
         List<News> allNews = getAllNews();
 
         for (News news : allNews) {
-            if (news.getId() == id) {
+            if (news.getId().equals(id)) {
                 return news;
             }
         }
@@ -51,8 +52,60 @@ public class FileNewsRepository implements NewsRepository {
         }
     }
 
+    @Override
+    public boolean removeNewsById(News removeNews) {
+        try {
+            List<String> lines = Files.readAllLines(Path.of(newsFile));
+            Iterator<String> iterator = lines.iterator();
+
+            while (iterator.hasNext()) {
+                String line = iterator.next();
+                if (!line.equals("")) {
+                    News news = createNews(line);
+                    if (news.getId().equals(removeNews.getId())) {
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+
+            Files.write(Path.of(newsFile), String.join("\n", lines).getBytes());
+            return true;
+        } catch (IOException e) {
+            System.out.println("Filed to remove news" + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public Long updateNews(News existingNews) {
+        List<News> allNews = getAllNews();
+
+        for (int i = 0; i < allNews.size(); i++) {
+            if (allNews.get(i).getId().equals(existingNews.getId())) {
+                allNews.set(i, existingNews);
+                writeNewsToFile(allNews);
+                return existingNews.getId();
+            }
+        }
+        return null;
+}
+
+    private void writeNewsToFile (List<News> allNews) {
+        List<String> newsStrings = new ArrayList<>();
+        for (News news: allNews){
+            newsStrings.add(createNewsSrting(news));
+        }
+        try {
+            Files.write(Path.of(newsFile), String.join("\n", newsStrings).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.out.println("Failed to save news: " + e.getMessage());
+        }
+    }
+
     private String createNewsSrting(News news) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return String.format("\n%d;%s;%s;%s;%s;%d",
                 news.getId(),
                 news.getTitle(),
@@ -77,11 +130,9 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     public static LocalDateTime timeFormatter(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return LocalDateTime.parse(date, formatter);
     }
 
-    public static void writeNews(List<News> news) {
-
-    }
 }

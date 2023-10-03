@@ -17,6 +17,9 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     implementation project(':module-repository')
     implementation project(':module-web')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
 }
 
 test {

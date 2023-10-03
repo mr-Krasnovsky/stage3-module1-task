@@ -9,4 +9,8 @@ public interface NewsRepository {
     News getNewsById(Long id);
 
     void saveNews(News news);
+
+    boolean removeNewsById(News removeNews);
+
+    Long updateNews(News existingNews);
 }

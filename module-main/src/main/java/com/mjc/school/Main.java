@@ -16,7 +16,7 @@ public class Main {
         this.scanner = new Scanner(System.in);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Main main = new Main();
         main.start();
     }
@@ -72,11 +72,92 @@ public class Main {
     }
 
     private void removeNewsById() {
-        System.out.println("removeNewsById");
+
+        System.out.println("Operation: Remove news by id.");
+        System.out.println("Enter news id:");
+
+        if (scanner.hasNextLong()) {
+            Long newsId = scanner.nextLong();
+            scanner.nextLine();
+            try {
+                NewsDTO news = new NewsDTO();
+                news.setId(newsId);
+                boolean removed = newsService.removeNewsById(news);
+                if (removed) {
+                    System.out.println(removed);
+                } else {
+                    throw new InputValidationException(
+                            Constants.ERROR_CODE_PREFIX +
+                                    Constants.ERROR_NULL_NEWS_OBJECT +
+                                    Constants.ERROR_MESSAGE_PREFIX +
+                            "Failed to remove news.");
+                }
+            } catch (InputValidationException | IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_INVALID_CONTENT +
+                            Constants.ERROR_MESSAGE_PREFIX +
+                            "News Id should be number.");
+            scanner.nextLine();
+        }
     }
 
     private void updateNews() {
-        System.out.println("updateNews");
+        String title = null;
+        String content = null;
+        long authorId = 0;
+
+        boolean validInput = false;
+        System.out.println("Operation: Update news.");
+        System.out.println("Enter news id:");
+        if (scanner.hasNextLong()) {
+            Long newsId = scanner.nextLong();
+            scanner.nextLine();
+
+            while (!validInput) {
+                System.out.println("Enter news title:");
+                title = scanner.nextLine();
+
+                System.out.println("Enter news content:");
+                content = scanner.nextLine();
+
+                System.out.println("Enter author id:");
+                if (scanner.hasNextLong()) {
+                    authorId = scanner.nextLong();
+                    validInput = true;
+                } else {
+                    System.out.println(Constants.ERROR_CODE_PREFIX +
+                                    Constants.ERROR_INVALID_CONTENT +
+                                    Constants.ERROR_MESSAGE_PREFIX +
+                                    "Author Id should be number");
+                    scanner.nextLine();
+                }
+            }
+            try {
+                NewsDTO news = new NewsDTO();
+                news.setId(newsId);
+                news.setTitle(title);
+                news.setContent(content);
+                news.setAuthorId(authorId);
+
+                Long updateNews = newsService.updateNews(news);
+                if (updateNews != null) {
+                    printNews(newsService.getNewsById(updateNews));
+                }
+            } catch (InputValidationException e) {
+                System.out.println(e.getMessage());
+                start();
+            }
+        } else {
+            System.out.println(Constants.ERROR_CODE_PREFIX +
+                    Constants.ERROR_INVALID_CONTENT +
+                    Constants.ERROR_MESSAGE_PREFIX +
+                    "News Id should be number.");
+            scanner.nextLine();
+        }
     }
 
     private void createNews() {
@@ -99,7 +180,11 @@ public class Main {
                 authorId = scanner.nextLong();
                 validInput = true;
             } else {
-                System.out.println("ERROR_CODE: 000013 ERROR_MESSAGE: Author Id should be number");
+                System.out.println(
+                        Constants.ERROR_CODE_PREFIX +
+                                Constants.ERROR_INVALID_CONTENT +
+                                Constants.ERROR_MESSAGE_PREFIX +
+                                "Author Id should be number");
                 scanner.nextLine();
             }
         }
@@ -136,7 +221,11 @@ public class Main {
                 scanner.nextLine();
             }
         } else {
-            System.out.println("ERROR_CODE: 000002 ERROR_MESSAGE: News Id should be number.");
+            System.out.println(
+                    Constants.ERROR_CODE_PREFIX +
+                    Constants.ERROR_INVALID_CONTENT +
+                    Constants.ERROR_MESSAGE_PREFIX +
+                    "News Id should be number.");
             scanner.nextLine();
         }
     }

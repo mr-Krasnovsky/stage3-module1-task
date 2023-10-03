@@ -12,7 +12,8 @@ public class NewsService {
     private final AuthorRepository authorRepository;
     private final NewsMapper newsMapper = NewsMapper.INSTANSE;
 
-    public NewsService(NewsRepository newsRepository, AuthorRepository authorRepository) {
+    public NewsService(NewsRepository newsRepository,
+                       AuthorRepository authorRepository) {
         this.newsRepository = newsRepository;
         this.authorRepository = authorRepository;
     }
@@ -36,8 +37,14 @@ public class NewsService {
         News news = newsRepository.getNewsById(newsId);
         if (news != null) {
             return newsMapper.newsToNewsDTO(news);
-        } else
-            throw new InputValidationException("ERROR_CODE: 000001 ERROR_MESSAGE: News with id " + newsId + " does not exist.");
+        } else {
+            throw new InputValidationException(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_NON_EXISTENT_NEWS +
+                            Constants.ERROR_MESSAGE_PREFIX +
+                    "News with id: " +
+                    newsId + " does not exist.");
+        }
     }
 
     public Long createNews(NewsDTO newsDTO) {
@@ -69,7 +76,7 @@ public class NewsService {
         if (news.isEmpty()) {
             return 1L;
         }
-        Long maxId = news.stream().mapToLong(News::getId).max().orElse(0L);
+        long maxId = news.stream().mapToLong(News::getId).max().orElse(0L);
         return maxId + 1;
     }
 
@@ -78,13 +85,82 @@ public class NewsService {
         String newsContent = newsDTO.getContent();
         Long authorId = newsDTO.getAuthorId();
         if (newsTitle.length() < 5 || newsTitle.length() > 30) {
-            throw new InputValidationException("ERROR_CODE: 000012 ERROR_MESSAGE: News title can not be less than 5 and more than 30 symbols. News title is: " + newsTitle);
+            throw new InputValidationException(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_INVALID_TITLE +
+                            Constants.ERROR_MESSAGE_PREFIX
+                            + "News title can not be less than 5 "
+                            + "and more than 30 symbols. News title is: "
+                            + newsTitle);
         } else if (newsContent.length() < 5 || newsContent.length() > 255) {
-            throw new InputValidationException("ERROR_CODE: 000012 ERROR_MESSAGE: News content can not be less than 5 and more than 255 symbols. News title is: " + newsContent);
+            throw new InputValidationException(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_INVALID_TITLE +
+                            Constants.ERROR_MESSAGE_PREFIX
+                            + "News content can not be less than 5 and more "
+                            + "than 255 symbols. News title is: "
+                            + newsContent);
         } else if (authorRepository.getAuthorByID(authorId) == null) {
-            throw new InputValidationException("ERROR_CODE: 000012 ERROR_MESSAGE: Author Id does not exist. Author Id is: " + authorId);
+            throw new InputValidationException(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_INVALID_TITLE +
+                            Constants.ERROR_MESSAGE_PREFIX
+                            + "Author Id does not exist. "
+                            + "Author Id is: " + authorId);
         }
         return true;
     }
 
+    public boolean removeNewsById(NewsDTO news) throws InputValidationException, IOException {
+        if (news == null) {
+            throw new InputValidationException(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_NON_EXISTENT_AUTHOR +
+                            Constants.ERROR_MESSAGE_PREFIX +
+                            "News object is null.");
+        }
+
+        News removeNews = newsMapper.newsDTOToNews(news);
+        List<News> allNews = newsRepository.getAllNews();
+        boolean removed = false;
+
+        for (News existingNews : allNews) {
+            if (existingNews.getId().equals(removeNews.getId())) {
+                removed = newsRepository.removeNewsById(removeNews);
+                break;
+            }
+        }
+        if (!removed) {
+            throw new InputValidationException(Constants.ERROR_CODE_PREFIX +
+                    Constants.ERROR_NON_EXISTENT_NEWS +
+                    Constants.ERROR_MESSAGE_PREFIX + "News with "
+                    + removeNews.getId() + " does not exist.");
+        }
+        return removed;
+    }
+
+    public Long updateNews(NewsDTO news) throws InputValidationException {
+        try {
+            checkNews(news);
+        } catch (InputValidationException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        Long newsId = news.getId();
+        News existingNews = newsRepository.getNewsById(newsId);
+
+        if (existingNews != null) {
+            existingNews.setTitle(news.getTitle());
+            existingNews.setContent(news.getContent());
+            existingNews.setAuthorId(news.getAuthorId());
+            existingNews.setLastUpdateDate(LocalDateTime.now());
+            return newsRepository.updateNews(existingNews);
+        } else {
+            throw new InputValidationException(
+                    Constants.ERROR_CODE_PREFIX +
+                            Constants.ERROR_NON_EXISTENT_NEWS +
+                            Constants.ERROR_MESSAGE_PREFIX +
+                    "News with id: " + newsId + " does not exist.");
+        }
+    }
 }
