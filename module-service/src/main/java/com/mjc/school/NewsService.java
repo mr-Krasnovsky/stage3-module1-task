@@ -1,5 +1,8 @@
 package com.mjc.school;
 
+import com.mjc.school.repository.implementation.AuthorRepository;
+import com.mjc.school.repository.model.News;
+import com.mjc.school.repository.implementation.NewsRepository;
 import com.mjc.school.сustomExceptions.InputValidationException;
 
 
@@ -59,7 +62,7 @@ public class NewsService {
             newsDTO.setLastUpdateDate(createDate);
 
             News news = newsMapper.newsDTOToNews(newsDTO);
-            newsRepository.saveNews(news);
+            newsRepository.createNews(news);
             return generatedId;
         } catch (InputValidationException e) {
             System.out.println(e.getMessage());
@@ -113,7 +116,7 @@ public class NewsService {
         return true;
     }
 
-    public boolean removeNewsById(NewsDTO news) throws InputValidationException, IOException {
+    public boolean deleteNewsById(NewsDTO news) throws InputValidationException, IOException {
         if (news == null) {
             throw new InputValidationException(
                     Constants.ERROR_CODE_PREFIX +
@@ -128,7 +131,7 @@ public class NewsService {
 
         for (News existingNews : allNews) {
             if (existingNews.getId().equals(removeNews.getId())) {
-                removed = newsRepository.removeNewsById(removeNews);
+                removed = newsRepository.deleteNewsById(removeNews);
                 break;
             }
         }

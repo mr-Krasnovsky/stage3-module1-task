@@ -1,4 +1,6 @@
-package com.mjc.school;
+package com.mjc.school.repository.implementation;
+
+import com.mjc.school.repository.model.Author;
 
 import java.io.IOException;
 import java.nio.file.Files;

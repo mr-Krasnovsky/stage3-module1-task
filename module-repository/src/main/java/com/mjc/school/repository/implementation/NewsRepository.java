@@ -1,4 +1,6 @@
-package com.mjc.school;
+package com.mjc.school.repository.implementation;
+
+import com.mjc.school.repository.model.News;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,9 +10,9 @@ public interface NewsRepository {
 
     News getNewsById(Long id);
 
-    void saveNews(News news);
+    void createNews(News news);
 
-    boolean removeNewsById(News removeNews);
+    boolean deleteNewsById(News removeNews);
 
     Long updateNews(News existingNews);
 }

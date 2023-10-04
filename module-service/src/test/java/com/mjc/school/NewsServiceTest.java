@@ -1,5 +1,9 @@
 package com.mjc.school;
 
+import com.mjc.school.repository.model.Author;
+import com.mjc.school.repository.implementation.AuthorRepository;
+import com.mjc.school.repository.model.News;
+import com.mjc.school.repository.implementation.NewsRepository;
 import com.mjc.school.сustomExceptions.InputValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,7 +76,7 @@ public class NewsServiceTest {
 
         Long generatedId = newsService.createNews(newsDTO);
 
-        verify(newsRepository, times(1)).saveNews(any(News.class));
+        verify(newsRepository, times(1)).createNews(any(News.class));
         assertEquals(generatedId, newsDTO.getId());
         assertEquals(newsDTO.getCreateDate(), newsDTO.getLastUpdateDate());
     }
@@ -88,7 +92,7 @@ public class NewsServiceTest {
         when(newsRepository.getAllNews()).thenReturn(new ArrayList<>());
 
         assertThrows(InputValidationException.class, () -> {
-            newsService.removeNewsById(newsDTO);
+            newsService.deleteNewsById(newsDTO);
         });
     }
     @Test

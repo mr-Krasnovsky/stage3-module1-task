@@ -1,5 +1,7 @@
 package com.mjc.school;
 
+import com.mjc.school.repository.implementation.FileAuthorRepository;
+import com.mjc.school.repository.implementation.FileNewsRepository;
 import com.mjc.school.сustomExceptions.InputValidationException;
 
 import java.io.IOException;
@@ -81,7 +83,7 @@ public class Main {
             try {
                 NewsDTO news = new NewsDTO();
                 news.setId(newsId);
-                boolean removed = newsService.removeNewsById(news);
+                boolean removed = newsService.deleteNewsById(news);
                 if (removed) {
                     System.out.println(removed);
                 } else {

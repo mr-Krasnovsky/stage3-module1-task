@@ -1,5 +1,7 @@
 package com.mjc.school;
 
+import com.mjc.school.repository.model.News;
+
 import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 

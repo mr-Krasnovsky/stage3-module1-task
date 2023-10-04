@@ -1,4 +1,6 @@
-package com.mjc.school;
+package com.mjc.school.repository.implementation;
+
+import com.mjc.school.repository.model.News;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,8 +45,8 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public void saveNews(News news) {
-        String newsString = createNewsSrting(news);
+    public void createNews(News news) {
+        String newsString = createNewsString(news);
         try {
             Files.write(Path.of(newsFile), newsString.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
@@ -53,7 +55,7 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public boolean removeNewsById(News removeNews) {
+    public boolean deleteNewsById(News removeNews) {
         try {
             List<String> lines = Files.readAllLines(Path.of(newsFile));
             Iterator<String> iterator = lines.iterator();
@@ -94,7 +96,7 @@ public class FileNewsRepository implements NewsRepository {
     private void writeNewsToFile (List<News> allNews) {
         List<String> newsStrings = new ArrayList<>();
         for (News news: allNews){
-            newsStrings.add(createNewsSrting(news));
+            newsStrings.add(createNewsString(news));
         }
         try {
             Files.write(Path.of(newsFile), String.join("\n", newsStrings).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
@@ -103,7 +105,7 @@ public class FileNewsRepository implements NewsRepository {
         }
     }
 
-    private String createNewsSrting(News news) {
+    private String createNewsString(News news) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return String.format("\n%d;%s;%s;%s;%s;%d",
