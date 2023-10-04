@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.mjc.school.NewsServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-10-04T20:57:03" hostname="DELL-ПК" time="5.497">
+<testsuite name="com.mjc.school.NewsServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-10-04T22:22:13" hostname="DELL-ПК" time="1.954">
   <properties/>
-  <testcase name="testGetNewsByNonExistentId()" classname="com.mjc.school.NewsServiceTest" time="3.343"/>
-  <testcase name="testRemoveNewsById()" classname="com.mjc.school.NewsServiceTest" time="0.076"/>
-  <testcase name="testUpdateNews()" classname="com.mjc.school.NewsServiceTest" time="2.034"/>
-  <testcase name="testGetAllNews()" classname="com.mjc.school.NewsServiceTest" time="0.013"/>
+  <testcase name="testGetNewsByNonExistentId()" classname="com.mjc.school.NewsServiceTest" time="1.838"/>
+  <testcase name="testRemoveNewsById()" classname="com.mjc.school.NewsServiceTest" time="0.047"/>
+  <testcase name="testUpdateNews()" classname="com.mjc.school.NewsServiceTest" time="0.03"/>
+  <testcase name="testGetAllNews()" classname="com.mjc.school.NewsServiceTest" time="0.012"/>
   <testcase name="testCreateNews()" classname="com.mjc.school.NewsServiceTest" time="0.016"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

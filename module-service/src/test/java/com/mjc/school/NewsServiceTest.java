@@ -71,8 +71,15 @@ public class NewsServiceTest {
         newsDTO.setContent("Test Content");
         newsDTO.setAuthorId(1L);
 
+        News news = new News(newsDTO.getId(), newsDTO.getTitle(), newsDTO.getContent(), LocalDateTime.now(), LocalDateTime.now(), newsDTO.getAuthorId());
+
         when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(new Author(newsDTO.getAuthorId(), "Author Name"));
-        when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(new News(newsDTO.getId(), newsDTO.getTitle(), newsDTO.getContent(), LocalDateTime.now(), LocalDateTime.now(), newsDTO.getAuthorId()));
+        when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(news);
+        when(newsRepository.createNews(any(News.class))).thenAnswer(invocation -> {
+            News newsArgument = invocation.getArgument(0);
+            newsArgument.setId(1L);
+            return newsArgument;
+        });
 
         Long generatedId = newsService.createNews(newsDTO);
 
@@ -112,7 +119,7 @@ public class NewsServiceTest {
 
         Author author = new Author(1L, "Author Name");
         when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(author);
-        when(newsRepository.updateNews(existingNews)).thenReturn(1L);
+        when(newsRepository.updateNews(existingNews)).thenReturn(existingNews);
 
         Long updatedId = newsService.updateNews(newsDTO);
 

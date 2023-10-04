@@ -47,8 +47,8 @@ public class NewsService {
                     Constants.ERROR_CODE_PREFIX +
                             Constants.ERROR_NON_EXISTENT_NEWS +
                             Constants.ERROR_MESSAGE_PREFIX +
-                    "News with id: " +
-                    newsId + " does not exist.");
+                            "News with id: " +
+                            newsId + " does not exist.");
         }
     }
 
@@ -62,9 +62,7 @@ public class NewsService {
             newsDTO.setLastUpdateDate(createDate);
 
             News news = newsMapper.newsDTOToNews(newsDTO);
-            if (newsRepository.createNews(news) != null) {
-                return generatedId;
-            }
+            return newsRepository.createNews(news).getId();
         } catch (InputValidationException e) {
             System.out.println(e.getMessage());
         }
@@ -166,7 +164,7 @@ public class NewsService {
                     Constants.ERROR_CODE_PREFIX +
                             Constants.ERROR_NON_EXISTENT_NEWS +
                             Constants.ERROR_MESSAGE_PREFIX +
-                    "News with id: " + newsId + " does not exist.");
+                            "News with id: " + newsId + " does not exist.");
         }
     }
 }

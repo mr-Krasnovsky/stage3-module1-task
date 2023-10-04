@@ -1,13 +1,12 @@
 package com.mjc.school;
 
 import com.mjc.school.repository.model.News;
-
 import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-04T19:17:16+0300",
+    date = "2023-10-05T01:04:21+0300",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.6 (Oracle Corporation)"
 )
 public class NewsMapperImpl implements NewsMapper {
