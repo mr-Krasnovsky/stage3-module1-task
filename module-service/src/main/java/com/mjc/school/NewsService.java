@@ -26,7 +26,7 @@ public class NewsService {
     public List<NewsDTO> getAllNews() {
         List<News> newsList = null;
         try {
-            newsList = newsRepository.getAllNews();
+            newsList = newsRepository.readAllNews();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -39,7 +39,7 @@ public class NewsService {
     }
 
     public NewsDTO getNewsById(Long newsId) throws InputValidationException {
-        News news = newsRepository.getNewsById(newsId);
+        News news = newsRepository.readById(newsId);
         if (news != null) {
             return newsMapper.newsToNewsDTO(news);
         } else {
@@ -62,8 +62,9 @@ public class NewsService {
             newsDTO.setLastUpdateDate(createDate);
 
             News news = newsMapper.newsDTOToNews(newsDTO);
-            newsRepository.createNews(news);
-            return generatedId;
+            if (newsRepository.createNews(news) != null) {
+                return generatedId;
+            }
         } catch (InputValidationException e) {
             System.out.println(e.getMessage());
         }
@@ -74,7 +75,7 @@ public class NewsService {
 
         List<News> news = null;
         try {
-            news = newsRepository.getAllNews();
+            news = newsRepository.readAllNews();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -116,7 +117,7 @@ public class NewsService {
         return true;
     }
 
-    public boolean deleteNewsById(NewsDTO news) throws InputValidationException, IOException {
+    public Boolean deleteNewsById(NewsDTO news) throws InputValidationException, IOException {
         if (news == null) {
             throw new InputValidationException(
                     Constants.ERROR_CODE_PREFIX +
@@ -126,8 +127,8 @@ public class NewsService {
         }
 
         News removeNews = newsMapper.newsDTOToNews(news);
-        List<News> allNews = newsRepository.getAllNews();
-        boolean removed = false;
+        List<News> allNews = newsRepository.readAllNews();
+        Boolean removed = false;
 
         for (News existingNews : allNews) {
             if (existingNews.getId().equals(removeNews.getId())) {
@@ -152,14 +153,14 @@ public class NewsService {
             return null;
         }
         Long newsId = news.getId();
-        News existingNews = newsRepository.getNewsById(newsId);
+        News existingNews = newsRepository.readById(newsId);
 
         if (existingNews != null) {
             existingNews.setTitle(news.getTitle());
             existingNews.setContent(news.getContent());
             existingNews.setAuthorId(news.getAuthorId());
             existingNews.setLastUpdateDate(LocalDateTime.now());
-            return newsRepository.updateNews(existingNews);
+            return newsRepository.updateNews(existingNews).getId();
         } else {
             throw new InputValidationException(
                     Constants.ERROR_CODE_PREFIX +

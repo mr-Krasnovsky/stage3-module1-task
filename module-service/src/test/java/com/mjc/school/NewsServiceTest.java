@@ -44,7 +44,7 @@ public class NewsServiceTest {
     @Test
     public void testGetAllNews() throws IOException {
         List<News> mockNewsList = new ArrayList<>();
-        when(newsRepository.getAllNews()).thenReturn(mockNewsList);
+        when(newsRepository.readAllNews()).thenReturn(mockNewsList);
 
         List<NewsDTO> result = newsService.getAllNews();
 
@@ -89,7 +89,7 @@ public class NewsServiceTest {
 
         LocalDateTime now = LocalDateTime.now();
         when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(new News(newsId, "Sample Title", "Sample Content", now, now, 1L));
-        when(newsRepository.getAllNews()).thenReturn(new ArrayList<>());
+        when(newsRepository.readAllNews()).thenReturn(new ArrayList<>());
 
         assertThrows(InputValidationException.class, () -> {
             newsService.deleteNewsById(newsDTO);
@@ -107,7 +107,7 @@ public class NewsServiceTest {
         LocalDateTime now = LocalDateTime.now();
         News existingNews = new News(newsId, "Original Title", "Original Content", now, now, 1L);
 
-        when(newsRepository.getNewsById(newsId)).thenReturn(existingNews);
+        when(newsRepository.readById(newsId)).thenReturn(existingNews);
 
 
         Author author = new Author(1L, "Author Name");

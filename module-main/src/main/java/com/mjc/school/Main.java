@@ -1,7 +1,7 @@
 package com.mjc.school;
 
-import com.mjc.school.repository.implementation.FileAuthorRepository;
-import com.mjc.school.repository.implementation.FileNewsRepository;
+import com.mjc.school.repository.implementation.DataSourceAuthorRepository;
+import com.mjc.school.repository.implementation.DataSourceNewsRepository;
 import com.mjc.school.сustomExceptions.InputValidationException;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ public class Main {
     private final Scanner scanner;
 
     public Main() {
-        this.newsService = new NewsService(new FileNewsRepository(), new FileAuthorRepository());
+        this.newsService = new NewsService(new DataSourceNewsRepository(), new DataSourceAuthorRepository());
         this.scanner = new Scanner(System.in);
     }
 
@@ -83,7 +83,7 @@ public class Main {
             try {
                 NewsDTO news = new NewsDTO();
                 news.setId(newsId);
-                boolean removed = newsService.deleteNewsById(news);
+                Boolean removed = newsService.deleteNewsById(news);
                 if (removed) {
                     System.out.println(removed);
                 } else {

@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.util.List;
 
 public interface NewsRepository {
-    List<News> getAllNews() throws IOException;
+    List<News> readAllNews() throws IOException;
 
-    News getNewsById(Long id);
+    News readById(Long id);
 
-    void createNews(News news);
+    News createNews(News news);
 
-    boolean deleteNewsById(News removeNews);
+    Boolean deleteNewsById(News removeNews);
 
-    Long updateNews(News existingNews);
+    News updateNews(News existingNews);
 }

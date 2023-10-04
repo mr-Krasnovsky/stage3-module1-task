@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class FileNewsRepository implements NewsRepository {
+public class DataSourceNewsRepository implements NewsRepository {
     private static final String newsFile = "module-repository/src/main/resources/content.txt";
 
     @Override
-    public List<News> getAllNews() {
+    public List<News> readAllNews() {
         List<News> allNews = new ArrayList<>();
         try {
             List<String> lines = Files.readAllLines(Path.of(newsFile));
@@ -33,8 +33,8 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public News getNewsById(Long id) {
-        List<News> allNews = getAllNews();
+    public News readById(Long id) {
+        List<News> allNews = readAllNews();
 
         for (News news : allNews) {
             if (news.getId().equals(id)) {
@@ -45,17 +45,19 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public void createNews(News news) {
+    public News createNews(News news) {
         String newsString = createNewsString(news);
         try {
             Files.write(Path.of(newsFile), newsString.getBytes(), StandardOpenOption.APPEND);
+            return news;
         } catch (IOException e) {
             System.out.println("Failed to save news: " + e.getMessage());
         }
+        return null;
     }
 
     @Override
-    public boolean deleteNewsById(News removeNews) {
+    public Boolean deleteNewsById(News removeNews) {
         try {
             List<String> lines = Files.readAllLines(Path.of(newsFile));
             Iterator<String> iterator = lines.iterator();
@@ -80,14 +82,14 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public Long updateNews(News existingNews) {
-        List<News> allNews = getAllNews();
+    public News updateNews(News existingNews) {
+        List<News> allNews = readAllNews();
 
         for (int i = 0; i < allNews.size(); i++) {
             if (allNews.get(i).getId().equals(existingNews.getId())) {
                 allNews.set(i, existingNews);
                 writeNewsToFile(allNews);
-                return existingNews.getId();
+                return existingNews;
             }
         }
         return null;
