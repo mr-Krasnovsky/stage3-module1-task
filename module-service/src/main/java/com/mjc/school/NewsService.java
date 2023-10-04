@@ -1,11 +1,13 @@
 package com.mjc.school;
 
-import com.mjc.school.CustomExceptions.InputValidationException;
+import com.mjc.school.сustomExceptions.InputValidationException;
+
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class NewsService {
     private final NewsRepository newsRepository;

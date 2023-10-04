@@ -1,9 +1,8 @@
 package com.mjc.school;
 
-import com.mjc.school.CustomExceptions.InputValidationException;
+import com.mjc.school.сustomExceptions.InputValidationException;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 

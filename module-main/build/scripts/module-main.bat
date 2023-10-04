@@ -67,11 +67,11 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\module-main.jar
+set CLASSPATH=%APP_HOME%\lib\module-main.jar;%APP_HOME%\lib\module-service.jar;%APP_HOME%\lib\module-repository.jar;%APP_HOME%\lib\module-web.jar;%APP_HOME%\lib\mapstruct-1.4.2.Final.jar
 
 
 @rem Execute module-main
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %MODULE_MAIN_OPTS%  -classpath "%CLASSPATH%" com.mjc.school.MainApplication %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %MODULE_MAIN_OPTS%  -classpath "%CLASSPATH%" com.mjc.school.Main %*
 
 :end
 @rem End local scope for the variables with windows NT shell
