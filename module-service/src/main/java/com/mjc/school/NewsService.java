@@ -26,7 +26,7 @@ public class NewsService {
     public List<NewsDTO> getAllNews() {
         List<News> newsList = null;
         try {
-            newsList = newsRepository.readAllNews();
+            newsList = newsRepository.getAllNews();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -73,7 +73,7 @@ public class NewsService {
 
         List<News> news = null;
         try {
-            news = newsRepository.readAllNews();
+            news = newsRepository.getAllNews();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -125,7 +125,7 @@ public class NewsService {
         }
 
         News removeNews = newsMapper.newsDTOToNews(news);
-        List<News> allNews = newsRepository.readAllNews();
+        List<News> allNews = newsRepository.getAllNews();
         Boolean removed = false;
 
         for (News existingNews : allNews) {

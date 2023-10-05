@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface NewsRepository {
-    List<News> readAllNews() throws IOException;
+    List<News> getAllNews() throws IOException;
 
     News readById(Long id);
 

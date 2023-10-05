@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataSourceAuthorRepository implements AuthorRepository {
+public class FileAuthorRepository implements AuthorRepository {
     private static final String authorsFile = "module-repository/src/main/resources/author.txt";
 
 

@@ -1,7 +1,9 @@
 package com.mjc.school;
 
-import com.mjc.school.repository.implementation.DataSourceAuthorRepository;
-import com.mjc.school.repository.implementation.DataSourceNewsRepository;
+import com.mjc.school.repository.implementation.DataSource;
+import com.mjc.school.repository.implementation.FileAuthorRepository;
+import com.mjc.school.repository.implementation.FileNewsDataSource;
+import com.mjc.school.repository.implementation.FileNewsRepository;
 import com.mjc.school.сustomExceptions.InputValidationException;
 
 import java.io.IOException;
@@ -13,7 +15,7 @@ public class Main {
     private final Scanner scanner;
 
     public Main() {
-        this.newsService = new NewsService(new DataSourceNewsRepository(), new DataSourceAuthorRepository());
+        this.newsService = new NewsService(new FileNewsRepository(new FileNewsDataSource()), new FileAuthorRepository());
         this.scanner = new Scanner(System.in);
     }
 
