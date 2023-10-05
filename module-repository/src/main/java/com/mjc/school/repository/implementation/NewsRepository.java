@@ -12,7 +12,7 @@ public interface NewsRepository {
 
     News createNews(News news);
 
-    Boolean deleteNewsById(News removeNews);
+    Boolean deleteNewsById(Long id);
 
     News updateNews(News existingNews);
 }

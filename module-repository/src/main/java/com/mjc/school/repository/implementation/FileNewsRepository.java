@@ -60,7 +60,7 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public Boolean deleteNewsById(News removeNews) {
+    public Boolean deleteNewsById(Long newsId) {
         try {
             List<String> lines = dataSource.readAllLines();
             Iterator<String> iterator = lines.iterator();
@@ -69,7 +69,7 @@ public class FileNewsRepository implements NewsRepository {
                 String line = iterator.next();
                 if (!line.equals("")) {
                     News news = createNews(line);
-                    if (news.getId().equals(removeNews.getId())) {
+                    if (news.getId().equals(newsId)) {
                         iterator.remove();
                         break;
                     }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface DataSource {
     List<String> readAllLines() throws IOException;
+    public List<String> readAllAutors() throws IOException;
     void writeLines(List<String> lines) throws IOException;
     void createLines(String newsString) throws IOException;
 

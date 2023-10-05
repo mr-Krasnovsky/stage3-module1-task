@@ -9,14 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileAuthorRepository implements AuthorRepository {
-    private static final String authorsFile = "module-repository/src/main/resources/author.txt";
+    private final DataSource dataSource;
+
+    public FileAuthorRepository(DataSource dataSource) {
+
+        this.dataSource = dataSource;
+    }
 
 
     @Override
     public Author getAuthorByID(Long id) {
         List<Author> allAuthors = new ArrayList<>();
         try {
-            List<String> authors = Files.readAllLines(Path.of(authorsFile));
+            List<String> authors = dataSource.readAllAutors();
             allAuthors = createAuthors(authors);
             for (Author author : allAuthors) {
                 if (author.getId() == id) {

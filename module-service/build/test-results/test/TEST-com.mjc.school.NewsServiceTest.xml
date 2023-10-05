@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.mjc.school.NewsServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-10-05T04:46:17" hostname="DELL-ПК" time="2.369">
+<testsuite name="com.mjc.school.NewsServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-10-05T05:34:26" hostname="DELL-ПК" time="2.02">
   <properties/>
-  <testcase name="testGetNewsByNonExistentId()" classname="com.mjc.school.NewsServiceTest" time="2.246"/>
-  <testcase name="testRemoveNewsById()" classname="com.mjc.school.NewsServiceTest" time="0.05"/>
+  <testcase name="testGetNewsByNonExistentId()" classname="com.mjc.school.NewsServiceTest" time="1.903"/>
+  <testcase name="testRemoveNewsById()" classname="com.mjc.school.NewsServiceTest" time="0.049"/>
   <testcase name="testUpdateNews()" classname="com.mjc.school.NewsServiceTest" time="0.035"/>
-  <testcase name="testGetAllNews()" classname="com.mjc.school.NewsServiceTest" time="0.014"/>
-  <testcase name="testCreateNews()" classname="com.mjc.school.NewsServiceTest" time="0.014"/>
+  <testcase name="testGetAllNews()" classname="com.mjc.school.NewsServiceTest" time="0.011"/>
+  <testcase name="testCreateNews()" classname="com.mjc.school.NewsServiceTest" time="0.013"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

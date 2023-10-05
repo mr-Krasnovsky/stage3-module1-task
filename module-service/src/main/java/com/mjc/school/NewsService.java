@@ -130,7 +130,7 @@ public class NewsService {
 
         for (News existingNews : allNews) {
             if (existingNews.getId().equals(removeNews.getId())) {
-                removed = newsRepository.deleteNewsById(removeNews);
+                removed = newsRepository.deleteNewsById(removeNews.getId());
                 break;
             }
         }
