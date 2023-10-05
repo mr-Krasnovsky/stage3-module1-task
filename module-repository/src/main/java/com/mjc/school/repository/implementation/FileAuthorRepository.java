@@ -1,10 +1,8 @@
 package com.mjc.school.repository.implementation;
 
-import com.mjc.school.repository.model.Author;
+import com.mjc.school.repository.model.AuthorModel;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +16,12 @@ public class FileAuthorRepository implements AuthorRepository {
 
 
     @Override
-    public Author getAuthorByID(Long id) {
-        List<Author> allAuthors = new ArrayList<>();
+    public AuthorModel getAuthorByID(Long id) {
+        List<AuthorModel> allAuthors = new ArrayList<>();
         try {
             List<String> authors = dataSource.readAllAutors();
             allAuthors = createAuthors(authors);
-            for (Author author : allAuthors) {
+            for (AuthorModel author : allAuthors) {
                 if (author.getId() == id) {
                     return author;
                 }
@@ -34,12 +32,12 @@ public class FileAuthorRepository implements AuthorRepository {
         return null;
     }
 
-    private List<Author> createAuthors(List<String> authors) {
-        List<Author> allAuthors = new ArrayList<>();
+    private List<AuthorModel> createAuthors(List<String> authors) {
+        List<AuthorModel> allAuthors = new ArrayList<>();
         for (String str : authors) {
             String[] author = str.split(";");
             if (author.length == 2) {
-                allAuthors.add(new Author(Long.parseLong(author[0]), author[1]));
+                allAuthors.add(new AuthorModel(Long.parseLong(author[0]), author[1]));
             }
         }
         return allAuthors;

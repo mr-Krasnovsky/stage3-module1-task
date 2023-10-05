@@ -1,6 +1,6 @@
 package com.mjc.school;
 
-import com.mjc.school.repository.model.Author;
+import com.mjc.school.repository.model.AuthorModel;
 import com.mjc.school.repository.implementation.AuthorRepository;
 import com.mjc.school.repository.model.News;
 import com.mjc.school.repository.implementation.NewsRepository;
@@ -73,7 +73,7 @@ public class NewsServiceTest {
 
         News news = new News(newsDTO.getId(), newsDTO.getTitle(), newsDTO.getContent(), LocalDateTime.now(), LocalDateTime.now(), newsDTO.getAuthorId());
 
-        when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(new Author(newsDTO.getAuthorId(), "Author Name"));
+        when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(new AuthorModel(newsDTO.getAuthorId(), "Author Name"));
         when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(news);
         when(newsRepository.createNews(any(News.class))).thenAnswer(invocation -> {
             News newsArgument = invocation.getArgument(0);
@@ -117,7 +117,7 @@ public class NewsServiceTest {
         when(newsRepository.readById(newsId)).thenReturn(existingNews);
 
 
-        Author author = new Author(1L, "Author Name");
+        AuthorModel author = new AuthorModel(1L, "Author Name");
         when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(author);
         when(newsRepository.updateNews(existingNews)).thenReturn(existingNews);
 

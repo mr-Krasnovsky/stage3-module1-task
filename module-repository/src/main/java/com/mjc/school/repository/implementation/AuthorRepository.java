@@ -1,7 +1,7 @@
 package com.mjc.school.repository.implementation;
 
-import com.mjc.school.repository.model.Author;
+import com.mjc.school.repository.model.AuthorModel;
 
 public interface AuthorRepository {
-    Author getAuthorByID(Long id);
+    AuthorModel getAuthorByID(Long id);
 }
