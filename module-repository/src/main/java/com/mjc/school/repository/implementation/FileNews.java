@@ -1,6 +1,6 @@
 package com.mjc.school.repository.implementation;
 
-import com.mjc.school.repository.model.News;
+import com.mjc.school.repository.model.NewsModel;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -9,23 +9,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class FileNewsRepository implements NewsRepository {
+public class FileNews implements News {
     private final DataSource dataSource;
 
-    public FileNewsRepository(DataSource dataSource) {
+    public FileNews(DataSource dataSource) {
 
         this.dataSource = dataSource;
     }
 
 
     @Override
-    public List<News> getAllNews() {
-        List<News> allNews = new ArrayList<>();
+    public List<NewsModel> getAllNews() {
+        List<NewsModel> allNews = new ArrayList<>();
         try {
             List<String> lines = dataSource.readAllLines();
             for (String str : lines) {
                 if (!str.equals("")) {
-                    allNews.add(createNews(str));
+                    allNews.add(makeNews(str));
                 }
             }
         } catch (IOException e) {
@@ -36,23 +36,23 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public News readById(Long id) {
-        List<News> allNews = getAllNews();
+    public NewsModel readById(Long id) {
+        List<NewsModel> allNews = getAllNews();
 
-        for (News news : allNews) {
-            if (news.getId().equals(id)) {
-                return news;
+        for (NewsModel newsModel : allNews) {
+            if (newsModel.getId().equals(id)) {
+                return newsModel;
             }
         }
         return null;
     }
 
     @Override
-    public News createNews(News news) {
-        String newsString = makeNewsString(news);
+    public NewsModel createNews(NewsModel newsModel) {
+        String newsString = makeNewsString(newsModel);
         try {
             dataSource.createLines(newsString);
-            return news;
+            return newsModel;
         } catch (IOException e) {
             System.out.println("Failed to save news: " + e.getMessage());
         }
@@ -68,8 +68,8 @@ public class FileNewsRepository implements NewsRepository {
             while (iterator.hasNext()) {
                 String line = iterator.next();
                 if (!line.equals("")) {
-                    News news = createNews(line);
-                    if (news.getId().equals(newsId)) {
+                    NewsModel newsModel = makeNews(line);
+                    if (newsModel.getId().equals(newsId)) {
                         iterator.remove();
                         break;
                     }
@@ -85,23 +85,23 @@ public class FileNewsRepository implements NewsRepository {
     }
 
     @Override
-    public News updateNews(News existingNews) {
-        List<News> allNews = getAllNews();
+    public NewsModel updateNews(NewsModel existingNewsModel) {
+        List<NewsModel> allNews = getAllNews();
 
         for (int i = 0; i < allNews.size(); i++) {
-            if (allNews.get(i).getId().equals(existingNews.getId())) {
-                allNews.set(i, existingNews);
+            if (allNews.get(i).getId().equals(existingNewsModel.getId())) {
+                allNews.set(i, existingNewsModel);
                 writeNewsToFile(allNews);
-                return existingNews;
+                return existingNewsModel;
             }
         }
         return null;
 }
 
-    private void writeNewsToFile (List<News> allNews) {
+    private void writeNewsToFile (List<NewsModel> allNews) {
         List<String> newsStrings = new ArrayList<>();
-        for (News news: allNews){
-            newsStrings.add(makeNewsString(news));
+        for (NewsModel newsModel : allNews){
+            newsStrings.add(makeNewsString(newsModel));
         }
         try {
             dataSource.writeNewsToFile(newsStrings);
@@ -110,30 +110,30 @@ public class FileNewsRepository implements NewsRepository {
         }
     }
 
-    private String makeNewsString(News news) {
+    private String makeNewsString(NewsModel newsModel) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return String.format("\n%d;%s;%s;%s;%s;%d",
-                news.getId(),
-                news.getTitle(),
-                news.getContent(),
-                news.getCreateDate().format(formatter),
-                news.getLastUpdateDate().format(formatter),
-                news.getAuthorId());
+                newsModel.getId(),
+                newsModel.getTitle(),
+                newsModel.getContent(),
+                newsModel.getCreateDate().format(formatter),
+                newsModel.getLastUpdateDate().format(formatter),
+                newsModel.getAuthorId());
     }
 
-    public News createNews(String str) {
-        News news = null;
+    public NewsModel makeNews(String str) {
+        NewsModel newsModel = null;
         String[] newsStr = str.split(";");
         if (newsStr.length == 6) {
-            news = new News(Long.parseLong(newsStr[0]),
+            newsModel = new NewsModel(Long.parseLong(newsStr[0]),
                     newsStr[1],
                     newsStr[2],
                     timeFormatter(newsStr[3]),
                     timeFormatter(newsStr[4]),
                     Long.parseLong(newsStr[5]));
         }
-        return news;
+        return newsModel;
     }
 
     public static LocalDateTime timeFormatter(String date) {

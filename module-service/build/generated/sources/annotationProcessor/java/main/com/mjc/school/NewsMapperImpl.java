@@ -1,36 +1,36 @@
 package com.mjc.school;
 
-import com.mjc.school.repository.model.News;
+import com.mjc.school.repository.model.NewsModel;
 import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-05T01:04:21+0300",
+    date = "2023-10-05T10:05:34+0400",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.6 (Oracle Corporation)"
 )
 public class NewsMapperImpl implements NewsMapper {
 
     @Override
-    public NewsDTO newsToNewsDTO(News news) {
-        if ( news == null ) {
+    public NewsDTO newsToNewsDTO(NewsModel newsModel) {
+        if ( newsModel == null ) {
             return null;
         }
 
         NewsDTO newsDTO = new NewsDTO();
 
-        newsDTO.setId( news.getId() );
-        newsDTO.setTitle( news.getTitle() );
-        newsDTO.setContent( news.getContent() );
-        newsDTO.setCreateDate( news.getCreateDate() );
-        newsDTO.setLastUpdateDate( news.getLastUpdateDate() );
-        newsDTO.setAuthorId( news.getAuthorId() );
+        newsDTO.setId( newsModel.getId() );
+        newsDTO.setTitle( newsModel.getTitle() );
+        newsDTO.setContent( newsModel.getContent() );
+        newsDTO.setCreateDate( newsModel.getCreateDate() );
+        newsDTO.setLastUpdateDate( newsModel.getLastUpdateDate() );
+        newsDTO.setAuthorId( newsModel.getAuthorId() );
 
         return newsDTO;
     }
 
     @Override
-    public News newsDTOToNews(NewsDTO newsDTO) {
+    public NewsModel newsDTOToNews(NewsDTO newsDTO) {
         if ( newsDTO == null ) {
             return null;
         }
@@ -49,8 +49,8 @@ public class NewsMapperImpl implements NewsMapper {
         lastUpdateDate = newsDTO.getLastUpdateDate();
         authorId = newsDTO.getAuthorId();
 
-        News news = new News( id, title, content, createDate, lastUpdateDate, authorId );
+        NewsModel newsModel = new NewsModel( id, title, content, createDate, lastUpdateDate, authorId );
 
-        return news;
+        return newsModel;
     }
 }

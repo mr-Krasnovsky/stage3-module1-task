@@ -1,7 +1,5 @@
 package com.mjc.school.repository.implementation;
 
-import com.mjc.school.repository.model.News;
-
 import java.io.IOException;
 import java.util.List;
 

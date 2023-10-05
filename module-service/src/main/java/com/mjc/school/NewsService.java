@@ -1,8 +1,8 @@
 package com.mjc.school;
 
-import com.mjc.school.repository.implementation.AuthorRepository;
-import com.mjc.school.repository.model.News;
-import com.mjc.school.repository.implementation.NewsRepository;
+import com.mjc.school.repository.implementation.Author;
+import com.mjc.school.repository.model.NewsModel;
+import com.mjc.school.repository.implementation.News;
 import com.mjc.school.сustomExceptions.InputValidationException;
 
 
@@ -13,35 +13,35 @@ import java.util.List;
 
 
 public class NewsService {
-    private final NewsRepository newsRepository;
-    private final AuthorRepository authorRepository;
+    private final News newsRepository;
+    private final Author authorRepository;
     private final NewsMapper newsMapper = NewsMapper.INSTANSE;
 
-    public NewsService(NewsRepository newsRepository,
-                       AuthorRepository authorRepository) {
+    public NewsService(News newsRepository,
+                       Author authorRepository) {
         this.newsRepository = newsRepository;
         this.authorRepository = authorRepository;
     }
 
     public List<NewsDTO> getAllNews() {
-        List<News> newsList = null;
+        List<NewsModel> newsModelList = null;
         try {
-            newsList = newsRepository.getAllNews();
+            newsModelList = newsRepository.getAllNews();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
         List<NewsDTO> newsDTOList = new ArrayList<>();
-        for (News news : newsList) {
-            NewsDTO newsDTO = newsMapper.newsToNewsDTO(news);
+        for (NewsModel newsModel : newsModelList) {
+            NewsDTO newsDTO = newsMapper.newsToNewsDTO(newsModel);
             newsDTOList.add(newsDTO);
         }
         return newsDTOList;
     }
 
     public NewsDTO getNewsById(Long newsId) throws InputValidationException {
-        News news = newsRepository.readById(newsId);
-        if (news != null) {
-            return newsMapper.newsToNewsDTO(news);
+        NewsModel newsModel = newsRepository.readById(newsId);
+        if (newsModel != null) {
+            return newsMapper.newsToNewsDTO(newsModel);
         } else {
             throw new InputValidationException(
                     Constants.ERROR_CODE_PREFIX +
@@ -61,8 +61,8 @@ public class NewsService {
             newsDTO.setCreateDate(createDate);
             newsDTO.setLastUpdateDate(createDate);
 
-            News news = newsMapper.newsDTOToNews(newsDTO);
-            return newsRepository.createNews(news).getId();
+            NewsModel newsModel = newsMapper.newsDTOToNews(newsDTO);
+            return newsRepository.createNews(newsModel).getId();
         } catch (InputValidationException e) {
             System.out.println(e.getMessage());
         }
@@ -71,16 +71,16 @@ public class NewsService {
 
     private Long generateId() {
 
-        List<News> news = null;
+        List<NewsModel> newsModels = null;
         try {
-            news = newsRepository.getAllNews();
+            newsModels = newsRepository.getAllNews();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (news.isEmpty()) {
+        if (newsModels.isEmpty()) {
             return 1L;
         }
-        long maxId = news.stream().mapToLong(News::getId).max().orElse(0L);
+        long maxId = newsModels.stream().mapToLong(NewsModel::getId).max().orElse(0L);
         return maxId + 1;
     }
 
@@ -124,13 +124,13 @@ public class NewsService {
                             "News object is null.");
         }
 
-        News removeNews = newsMapper.newsDTOToNews(news);
-        List<News> allNews = newsRepository.getAllNews();
+        NewsModel removeNewsModel = newsMapper.newsDTOToNews(news);
+        List<NewsModel> allNews = newsRepository.getAllNews();
         Boolean removed = false;
 
-        for (News existingNews : allNews) {
-            if (existingNews.getId().equals(removeNews.getId())) {
-                removed = newsRepository.deleteNewsById(removeNews.getId());
+        for (NewsModel existingNewsModel : allNews) {
+            if (existingNewsModel.getId().equals(removeNewsModel.getId())) {
+                removed = newsRepository.deleteNewsById(removeNewsModel.getId());
                 break;
             }
         }
@@ -138,7 +138,7 @@ public class NewsService {
             throw new InputValidationException(Constants.ERROR_CODE_PREFIX +
                     Constants.ERROR_NON_EXISTENT_NEWS +
                     Constants.ERROR_MESSAGE_PREFIX + "News with "
-                    + removeNews.getId() + " does not exist.");
+                    + removeNewsModel.getId() + " does not exist.");
         }
         return removed;
     }
@@ -151,14 +151,14 @@ public class NewsService {
             return null;
         }
         Long newsId = news.getId();
-        News existingNews = newsRepository.readById(newsId);
+        NewsModel existingNewsModel = newsRepository.readById(newsId);
 
-        if (existingNews != null) {
-            existingNews.setTitle(news.getTitle());
-            existingNews.setContent(news.getContent());
-            existingNews.setAuthorId(news.getAuthorId());
-            existingNews.setLastUpdateDate(LocalDateTime.now());
-            return newsRepository.updateNews(existingNews).getId();
+        if (existingNewsModel != null) {
+            existingNewsModel.setTitle(news.getTitle());
+            existingNewsModel.setContent(news.getContent());
+            existingNewsModel.setAuthorId(news.getAuthorId());
+            existingNewsModel.setLastUpdateDate(LocalDateTime.now());
+            return newsRepository.updateNews(existingNewsModel).getId();
         } else {
             throw new InputValidationException(
                     Constants.ERROR_CODE_PREFIX +

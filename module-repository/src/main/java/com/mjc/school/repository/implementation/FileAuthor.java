@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileAuthorRepository implements AuthorRepository {
+public class FileAuthor implements Author {
     private final DataSource dataSource;
 
-    public FileAuthorRepository(DataSource dataSource) {
+    public FileAuthor(DataSource dataSource) {
 
         this.dataSource = dataSource;
     }
@@ -20,7 +20,7 @@ public class FileAuthorRepository implements AuthorRepository {
         List<AuthorModel> allAuthors = new ArrayList<>();
         try {
             List<String> authors = dataSource.readAllAutors();
-            allAuthors = createAuthors(authors);
+            allAuthors = getAuthors(authors);
             for (AuthorModel author : allAuthors) {
                 if (author.getId() == id) {
                     return author;
@@ -32,7 +32,7 @@ public class FileAuthorRepository implements AuthorRepository {
         return null;
     }
 
-    private List<AuthorModel> createAuthors(List<String> authors) {
+    private List<AuthorModel> getAuthors(List<String> authors) {
         List<AuthorModel> allAuthors = new ArrayList<>();
         for (String str : authors) {
             String[] author = str.split(";");
@@ -42,6 +42,4 @@ public class FileAuthorRepository implements AuthorRepository {
         }
         return allAuthors;
     }
-
-
 }

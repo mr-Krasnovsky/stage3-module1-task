@@ -1,9 +1,9 @@
 package com.mjc.school;
 
 import com.mjc.school.repository.model.AuthorModel;
-import com.mjc.school.repository.implementation.AuthorRepository;
-import com.mjc.school.repository.model.News;
-import com.mjc.school.repository.implementation.NewsRepository;
+import com.mjc.school.repository.implementation.Author;
+import com.mjc.school.repository.model.NewsModel;
+import com.mjc.school.repository.implementation.News;
 import com.mjc.school.сustomExceptions.InputValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class NewsServiceTest {
+public class NewsModelServiceTest {
 
     @Mock
-    private NewsRepository newsRepository;
+    private News newsRepository;
 
     @Mock
-    private AuthorRepository authorRepository;
+    private Author authorRepository;
 
     @Mock
     private NewsMapper newsMapper;
@@ -43,13 +43,13 @@ public class NewsServiceTest {
 
     @Test
     public void testGetAllNews() throws IOException {
-        List<News> mockNewsList = new ArrayList<>();
-        when(newsRepository.getAllNews()).thenReturn(mockNewsList);
+        List<NewsModel> mockNewsListModel = new ArrayList<>();
+        when(newsRepository.getAllNews()).thenReturn(mockNewsListModel);
 
         List<NewsDTO> result = newsService.getAllNews();
 
-        assertEquals(mockNewsList.size(), result.size());
-        verify(newsMapper, times(mockNewsList.size())).newsToNewsDTO(any(News.class));
+        assertEquals(mockNewsListModel.size(), result.size());
+        verify(newsMapper, times(mockNewsListModel.size())).newsToNewsDTO(any(NewsModel.class));
     }
 
     @Test
@@ -71,19 +71,19 @@ public class NewsServiceTest {
         newsDTO.setContent("Test Content");
         newsDTO.setAuthorId(1L);
 
-        News news = new News(newsDTO.getId(), newsDTO.getTitle(), newsDTO.getContent(), LocalDateTime.now(), LocalDateTime.now(), newsDTO.getAuthorId());
+        NewsModel newsModel = new NewsModel(newsDTO.getId(), newsDTO.getTitle(), newsDTO.getContent(), LocalDateTime.now(), LocalDateTime.now(), newsDTO.getAuthorId());
 
         when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(new AuthorModel(newsDTO.getAuthorId(), "Author Name"));
-        when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(news);
-        when(newsRepository.createNews(any(News.class))).thenAnswer(invocation -> {
-            News newsArgument = invocation.getArgument(0);
-            newsArgument.setId(1L);
-            return newsArgument;
+        when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(newsModel);
+        when(newsRepository.createNews(any(NewsModel.class))).thenAnswer(invocation -> {
+            NewsModel newsModelArgument = invocation.getArgument(0);
+            newsModelArgument.setId(1L);
+            return newsModelArgument;
         });
 
         Long generatedId = newsService.createNews(newsDTO);
 
-        verify(newsRepository, times(1)).createNews(any(News.class));
+        verify(newsRepository, times(1)).createNews(any(NewsModel.class));
         assertEquals(generatedId, newsDTO.getId());
         assertEquals(newsDTO.getCreateDate(), newsDTO.getLastUpdateDate());
     }
@@ -95,7 +95,7 @@ public class NewsServiceTest {
         newsDTO.setId(newsId);
 
         LocalDateTime now = LocalDateTime.now();
-        when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(new News(newsId, "Sample Title", "Sample Content", now, now, 1L));
+        when(newsMapper.newsDTOToNews(newsDTO)).thenReturn(new NewsModel(newsId, "Sample Title", "Sample Content", now, now, 1L));
         when(newsRepository.getAllNews()).thenReturn(new ArrayList<>());
 
         assertThrows(InputValidationException.class, () -> {
@@ -112,21 +112,21 @@ public class NewsServiceTest {
         newsDTO.setAuthorId(1L);
 
         LocalDateTime now = LocalDateTime.now();
-        News existingNews = new News(newsId, "Original Title", "Original Content", now, now, 1L);
+        NewsModel existingNewsModel = new NewsModel(newsId, "Original Title", "Original Content", now, now, 1L);
 
-        when(newsRepository.readById(newsId)).thenReturn(existingNews);
+        when(newsRepository.readById(newsId)).thenReturn(existingNewsModel);
 
 
         AuthorModel author = new AuthorModel(1L, "Author Name");
         when(authorRepository.getAuthorByID(newsDTO.getAuthorId())).thenReturn(author);
-        when(newsRepository.updateNews(existingNews)).thenReturn(existingNews);
+        when(newsRepository.updateNews(existingNewsModel)).thenReturn(existingNewsModel);
 
         Long updatedId = newsService.updateNews(newsDTO);
 
-        verify(newsRepository, times(1)).updateNews(existingNews);
+        verify(newsRepository, times(1)).updateNews(existingNewsModel);
         assertEquals(newsId, updatedId);
-        assertEquals("Updated Title", existingNews.getTitle());
-        assertEquals("Updated Content", existingNews.getContent());
-        assertEquals(newsDTO.getAuthorId(), existingNews.getAuthorId());
+        assertEquals("Updated Title", existingNewsModel.getTitle());
+        assertEquals("Updated Content", existingNewsModel.getContent());
+        assertEquals(newsDTO.getAuthorId(), existingNewsModel.getAuthorId());
     }
 }

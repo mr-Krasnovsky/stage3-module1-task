@@ -1,6 +1,6 @@
 package com.mjc.school;
 
-import com.mjc.school.repository.model.News;
+import com.mjc.school.repository.model.NewsModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -16,7 +16,7 @@ public interface NewsMapper {
     @Mapping(target = "createDate", source = "createDate")
     @Mapping(target = "lastUpdateDate", source = "lastUpdateDate")
     @Mapping(target = "authorId", source = "authorId")
-    NewsDTO newsToNewsDTO(News news);
+    NewsDTO newsToNewsDTO(NewsModel newsModel);
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "title", source = "title")
@@ -24,5 +24,5 @@ public interface NewsMapper {
     @Mapping(target = "createDate", source = "createDate")
     @Mapping(target = "lastUpdateDate", source = "lastUpdateDate")
     @Mapping(target = "authorId", source = "authorId")
-    News newsDTOToNews(NewsDTO newsDTO);
+    NewsModel newsDTOToNews(NewsDTO newsDTO);
 }
